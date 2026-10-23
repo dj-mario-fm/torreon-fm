@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Torreón FM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #091b27;
+      --bg-2: #0c2334;
+      --panel: rgba(18, 32, 42, 0.9);
+      --line: rgba(255, 255, 255, 0.07);
+      --primary: #f7d66c;
+      --primary-2: #f2b95c;
+      --cyan: #49d1ff;
+      --text: #edf8ff;
+      --muted: #a5c0cf;
+      --soft: #dceef9;
+      --danger: #ff5b61;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(73, 209, 255, 0.15), transparent 28%),
+        radial-gradient(circle at top right, rgba(247, 214, 108, 0.08), transparent 32%),
+        linear-gradient(180deg, #071921 0%, #0b1d2b 38%, #0d1f2d 100%);
+      color: var(--text);
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; }
+
+    .container {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(10, 22, 30, 0.72);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0e2537 0%, #0d1e2d 100%);
+      border: 2px solid rgba(247, 214, 108, 0.6);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .brand-mark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .brand-text h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.05em;
+    }
+
+    .brand-text p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: var(--soft);
+      opacity: 0.9;
+      font-size: 0.94rem;
+      cursor: pointer;
+    }
+
+    .nav a:hover { opacity: 1; }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--soft);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .live-dot, .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--danger);
+      box-shadow: 0 0 15px rgba(255, 91, 97, 0.9);
+      display: inline-block;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      align-items: center;
+      gap: 40px;
+      padding: 72px 0 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(73, 209, 255, 0.08);
+      border: 1px solid rgba(73, 209, 255, 0.18);
+      color: var(--soft);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+    }
+
+    .hero-copy h2 {
+      margin: 22px 0 18px;
+      font-size: clamp(2.8rem, 3vw + 1.1rem, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+    }
+
+    .highlight { color: var(--primary); }
+
+    .hero-copy p {
+      margin: 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.8;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .primary-btn {
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #101d29;
+      box-shadow: 0 18px 30px rgba(247, 214, 108, 0.22);
+      border: none;
+      cursor: pointer;
+    }
+
+    .primary-btn:hover { transform: translateY(-2px); }
+
+    .hero-aside {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .signal-card {
+      position: relative;
+      width: min(100%, 430px);
+      aspect-ratio: 1 / 1;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, rgba(55, 75, 90, 0.85), rgba(12, 23, 31, 0.97) 62%),
+        linear-gradient(160deg, rgba(17, 31, 42, 0.92), rgba(11, 19, 25, 0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 30px 80px rgba(4, 12, 18, 0.42);
+      overflow: hidden;
+    }
+
+    .signal-ring,
+    .signal-ring-small,
+    .signal-ring-tiny {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(247, 214, 108, 0.22);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .signal-ring { width: 72%; height: 72%; }
+    .signal-ring-small { width: 52%; height: 52%; animation-delay: 0.7s; }
+    .signal-ring-tiny { width: 28%; height: 28%; animation-delay: 1.3s; }
+
+    .signal-brand {
+      position: relative;
+      z-index: 2;
+      width: 38%;
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(247, 214, 108, 0.22), rgba(247, 214, 108, 0.06));
+      border: 1px solid rgba(247, 214, 108, 0.22);
+      box-shadow: 0 0 35px rgba(247, 214, 108, 0.12);
+      text-align: center;
+    }
+
+    .signal-brand span {
+      display: block;
+      font-size: clamp(1.1rem, 1.6vw, 1.8rem);
+      letter-spacing: -0.06em;
+      font-weight: 800;
+    }
+
+    .signal-brand small {
+      color: var(--primary);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(0.98);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+    }
+
+    .stream-panel {
+      background: linear-gradient(180deg, rgba(18, 34, 44, 0.96), rgba(14, 27, 36, 0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 28px 24px 20px;
+      margin-top: 10px;
+      box-shadow: 0 22px 60px rgba(4, 12, 18, 0.3);
+    }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status { display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
+
+    .now-playing {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin-top: 16px;
+    }
+
+    .meta {
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .title {
+      margin-top: 8px;
+      font-size: clamp(1.8rem, 2vw + 0.7rem, 2.8rem);
+      letter-spacing: -0.06em;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .waveform {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(27, minmax(0, 1fr));
+      align-items: end;
+      gap: 5px;
+      height: 88px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .waveform span {
+      display: block;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--cyan), var(--primary));
+      animation: equalizer 1.1s ease-in-out infinite alternate;
+    }
+
+    @keyframes equalizer {
+      0% { transform: scaleY(0.35); opacity: 0.7; }
+      100% { transform: scaleY(1); opacity: 1; }
+    }
+
+    .progress-wrap {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) 52px;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 46%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--cyan));
+      border-radius: inherit;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .control-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .play-btn {
+      width: 74px;
+      height: 74px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #101d29;
+      box-shadow: 0 18px 30px rgba(247, 214, 108, 0.2);
+      font-size: 1.7rem;
+    }
+
+    .control-btn:hover { transform: translateY(-2px); }
+
+    .stream-status {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      min-height: 20px;
+    }
+
+    .contact-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: min(420px, calc(100% - 24px));
+      background: rgba(14, 27, 35, 0.98);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.5);
+      padding: 24px 22px;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+
+    .contact-modal.open {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+
+    .contact-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .contact-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: -0.04em;
+    }
+
+    .close-btn {
+      border: none;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .contact-email {
+      display: block;
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 16px 14px;
+      color: var(--text);
+      font-size: 1rem;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 9, 14, 0.55);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 780px) {
+      .hero { grid-template-columns: 1fr; padding-top: 54px; }
+      .nav { gap: 12px 18px; justify-content: flex-start; }
+      .header-inner { flex-direction: column; align-items: flex-start; padding: 16px 0; }
+    }
+
+    @media (max-width: 520px) {
+      .cta-row { flex-direction: column; align-items: stretch; }
+      .primary-btn { width: 100%; }
+      .now-playing { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-label="Logo Torreón FM">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Torreón FM emblem">
+            <defs>
+              <linearGradient id="sunGlow" x1="0" x2="1">
+                <stop offset="0%" stop-color="#f7d66c" />
+                <stop offset="100%" stop-color="#f59e3b" />
+              </linearGradient>
+              <linearGradient id="stone" x1="0" x2="1">
+                <stop offset="0%" stop-color="#c2b296" />
+                <stop offset="100%" stop-color="#8a7564" />
+              </linearGradient>
+              <linearGradient id="stoneDark" x1="0" x2="1">
+                <stop offset="0%" stop-color="#4d5b66" />
+                <stop offset="100%" stop-color="#2e3946" />
+              </linearGradient>
+            </defs>
+
+            <rect x="0" y="0" width="160" height="160" fill="#0a2235"/>
+            <circle cx="80" cy="80" r="72" fill="#0d2940" opacity="0.2"/>
+
+            <g transform="translate(20 18)">
+              <g fill="none" stroke="url(#sunGlow)" stroke-width="7" stroke-linecap="round" opacity="0.98">
+                <path d="M18 34C28 20 38 14 50 14" />
+                <path d="M70 6C58 18 49 30 46 46" />
+                <path d="M96 18C84 28 76 38 72 52" />
+                <path d="M103 48C95 38 86 31 74 26" />
+              </g>
+
+              <g transform="translate(22 20)">
+                <path d="M18 9L30 0L41 9V20H18V9Z" fill="#6f635d"/>
+                <rect x="10" y="20" width="36" height="10" fill="#d8c7a9" opacity="0.9"/>
+                <rect x="14" y="30" width="28" height="34" fill="url(#stone)"/>
+                <rect x="18" y="34" width="20" height="26" fill="#765f4c" opacity="0.7"/>
+                <rect x="12" y="64" width="32" height="14" fill="#4d5b66"/>
+                <rect x="12" y="78" width="32" height="8" fill="#d8c7a9" opacity="0.75"/>
+              </g>
+
+              <path d="M45 40L92 40L98 80L38 80Z" fill="url(#stoneDark)"/>
+              <path d="M44 42H95V78H42Z" fill="#6a5245"/>
+              <g fill="#d7ccb1" opacity="0.78">
+                <rect x="50" y="48" width="9" height="10"/>
+                <rect x="66" y="48" width="9" height="10"/>
+                <rect x="82" y="48" width="9" height="10"/>
+                <rect x="50" y="64" width="9" height="10"/>
+                <rect x="66" y="64" width="9" height="10"/>
+                <rect x="82" y="64" width="9" height="10"/>
+              </g>
+
+              <path d="M70 6L94 34H46L70 6Z" fill="#211d1f" opacity="0.8"/>
+              <path d="M70 0L77 10H63L70 0Z" fill="#f7d66c"/>
+              <path d="M70 4L74 16H66L70 4Z" fill="#f5b64a"/>
+              <rect x="67" y="16" width="6" height="16" fill="#d5c7b5"/>
+              <g fill="#c9b79d">
+                <rect x="38" y="82" width="64" height="14"/>
+                <rect x="40" y="96" width="60" height="10"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="brand-text">
+          <h1>Torreón FM</h1>
+          <p>Tu radio, tu compañía</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#en-directo">En directo</a>
+        <a href="#contacto" id="contactLink">Contacto</a>
+        <a href="https://www.youtube.com/@torreon-fm" target="_blank" rel="noopener noreferrer">YouTube</a>
+        <a href="https://whatsapp.com/channel/0029VbDs9jE0bIdrdxFZKz3z" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <span class="live-pill"><span class="live-dot"></span> En vivo</span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio" class="container">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span> Radio online · Torreón</span>
+        <h2>La ciudad <span class="highlight">en sonido.</span></h2>
+        <p>
+          Escucha Torreón FM desde cualquier lugar. Música, conexión y energía de la región,
+          con una programación pensada para acompañarte todo el día.
+        </p>
+
+        <div class="cta-row">
+          <button class="primary-btn" id="listenNowBtn" type="button">
+            Escuchar ahora <span aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-aside">
+        <div class="signal-card" aria-hidden="true">
+          <div class="signal-ring"></div>
+          <div class="signal-ring-small"></div>
+          <div class="signal-ring-tiny"></div>
+
+          <div class="signal-brand">
+            <div>
+              <span>Torreón</span>
+              <small>FM</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="en-directo">
+      <div class="stream-panel">
+        <div class="panel-top">
+          <span class="status"><span class="dot"></span> En directo</span>
+          <span>Radio en vivo</span>
+        </div>
+
+        <div class="now-playing">
+          <div>
+            <div class="meta">Ahora suena</div>
+            <div class="title" id="track-title">Siente la ciudad</div>
+          </div>
+          <div class="meta">Streaming live</div>
+        </div>
+
+        <div class="waveform" aria-hidden="true">
+          <span style="height: 25%"></span>
+          <span style="height: 62%"></span>
+          <span style="height: 80%"></span>
+          <span style="height: 46%"></span>
+          <span style="height: 95%"></span>
+          <span style="height: 58%"></span>
+          <span style="height: 75%"></span>
+          <span style="height: 38%"></span>
+          <span style="height: 88%"></span>
+          <span style="height: 52%"></span>
+          <span style="height: 67%"></span>
+          <span style="height: 42%"></span>
+          <span style="height: 90%"></span>
+          <span style="height: 33%"></span>
+          <span style="height: 70%"></span>
+          <span style="height: 56%"></span>
+          <span style="height: 82%"></span>
+          <span style="height: 48%"></span>
+          <span style="height: 64%"></span>
+          <span style="height: 40%"></span>
+          <span style="height: 92%"></span>
+          <span style="height: 35%"></span>
+          <span style="height: 78%"></span>
+          <span style="height: 44%"></span>
+          <span style="height: 71%"></span>
+          <span style="height: 54%"></span>
+          <span style="height: 87%"></span>
+        </div>
+
+        <div class="progress-wrap">
+          <span>01:42</span>
+          <div class="progress"><div class="progress-fill"></div></div>
+          <span>03:18</span>
+        </div>
+
+        <div class="controls">
+          <button class="control-btn" aria-label="Anterior" type="button">⏮</button>
+          <button class="control-btn play-btn" id="play-toggle" aria-label="Reproducir" type="button">▶</button>
+          <button class="control-btn" aria-label="Siguiente" type="button">⏭</button>
+        </div>
+
+        <div id="stream-status" class="stream-status">Listo para escuchar</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="contact-modal" id="contactModal" aria-modal="true" role="dialog" aria-labelledby="contactTitle">
+    <div class="contact-header">
+      <h3 id="contactTitle">Contacto</h3>
+      <button class="close-btn" id="closeModal" type="button" aria-label="Cerrar">✕</button>
+    </div>
+
+    <span class="contact-email">torreon.fm.arroyomolios@gmail.com</span>
+  </div>
+
+  <audio id="streamAudio" preload="none" crossorigin="anonymous">
+    <source src="https://morcast.caster.fm:10720/5NpCU?token=5481dfa9ed77777270f00c8d168c594c" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const modal = document.getElementById('contactModal');
+    const overlay = document.getElementById('overlay');
+    const contactLink = document.getElementById('contactLink');
+    const closeModalBtn = document.getElementById('closeModal');
+    const playToggle = document.getElementById('play-toggle');
+    const listenNowBtn = document.getElementById('listenNowBtn');
+    const streamStatus = document.getElementById('stream-status');
+    const audio = document.getElementById('streamAudio');
+
+    function openModal() {
+      modal.classList.add('open');
+      overlay.classList.add('show');
+    }
+
+    function closeModalFunc() {
+      modal.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+
+    contactLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      openModal();
+    });
+
+    closeModalBtn.addEventListener('click', closeModalFunc);
+    overlay.addEventListener('click', closeModalFunc);
+
+    function toggleStream() {
+      if (audio.paused) {
+        streamStatus.textContent = 'Conectando al stream...';
+        audio.play()
+          .then(() => {
+            playToggle.textContent = '❚❚';
+            listenNowBtn.innerHTML = 'Escuchando <span aria-hidden="true">❚❚</span>';
+            streamStatus.textContent = 'Reproduciendo en vivo...';
+          })
+          .catch(() => {
+            streamStatus.textContent = 'Haz clic otra vez para iniciar el audio';
+          });
+      } else {
+        audio.pause();
+        playToggle.textContent = '▶';
+        listenNowBtn.innerHTML = 'Escuchar ahora <span aria-hidden="true">▶</span>';
+        streamStatus.textContent = 'Radio en vivo';
+      }
+    }
+
+    playToggle.addEventListener('click', toggleStream);
+    listenNowBtn.addEventListener('click', toggleStream);
+
+    audio.addEventListener('error', () => {
+      streamStatus.textContent = 'No se pudo conectar con el stream';
+      playToggle.textContent = '▶';
+      listenNowBtn.innerHTML = 'Escuchar ahora <span aria-hidden="true">▶</span>';
+    });
+
+    audio.addEventListener('playing', () => {
+      streamStatus.textContent = 'Reproduciendo en vivo...';
+    });
+
+    audio.addEventListener('pause', () => {
+      streamStatus.textContent = 'Radio en vivo';
+    });
+  </script>
+</body>
+</html>
